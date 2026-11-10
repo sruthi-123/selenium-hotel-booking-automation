@@ -1,5 +1,7 @@
 package PomTest;
-
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 import org.openqa.selenium.WebElement;
 
 import GlobalMethods.GlobalLibrary;
@@ -10,13 +12,19 @@ import PageObjects.HotelPageObject4;
 
 public class HotelPom extends GlobalLibrary {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		loadWebDriver();
+		Properties config = new Properties();
+
+		try (FileInputStream file =
+		        new FileInputStream("config.local.properties")) {
+		    config.load(file);
+		}
 		lauchWebUrl("https://adactinhotelapp.com/HotelAppBuild2/index.php");
 		//Step1
 		HotelPageObject1 hotelobj1 = new HotelPageObject1();
-		enterInput(hotelobj1.getUserName(), "YOUR_USERNAME");
-		enterInput(hotelobj1.getPassword(), "YOUR_PASSWORD");
+		enterInput(hotelobj1.getUserName(), config.getProperty("username"));
+		enterInput(hotelobj1.getPassword(), config.getProperty("password"));
 		clickElement(hotelobj1.getLogIn());
 		
 		//Step2
